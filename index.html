@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Capturar Objetos Caindo</title>
+    <style>
+        canvas {
+            background-color: rgb(0, 183, 255);
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="500" height="500"></canvas>
+    <script>
+        // Seleciona o canvas e o contexto 2D
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Variáveis do jogo
+        let jogadorX = canvas.width / 2 - 25; // Posição inicial do jogador
+        const jogadorLargura = 50; // Largura do jogador
+        const jogadorAltura = 20; // Altura do jogador
+
+        let objetoX = Math.random() * (canvas.width - 20); // Posição inicial do objeto
+        let objetoY = 0; // O objeto começa no topo
+        const objetoLargura = 20; // Largura do objeto
+        const objetoAltura = 20; // Altura do objeto
+        let velocidadeObjeto = 3; // Velocidade de queda do objeto
+        let pontuacao = 0; // Pontuação inicial
+        let jogoAtivo = true; // Controla se o jogo está ativo
+    
+ 
+// Captura as teclas pressionadas
+let setaEsquerda = false;
+let setaDireita = false;
+
+// Função para desenhar o jogador
+function desenhaJogador() {
+  ctx.fillStyle = "green";
+  ctx.fillRect(jogadorX, canvas.height - jogadorAltura, jogadorLargura, jogadorAltura);
+}
+
+// Função para desenhar o objeto caindo
+function desenhaObjeto() {
+  ctx.fillStyle = "red";
+  ctx.fillRect(objetoX, objetoY, objetoLargura, objetoAltura);
+}
+
+// Função para desenhar a pontuação
+function desenhaPontuacao() {
+  ctx.fillStyle = "black";
+  ctx.font = "20px Arial";
+  ctx.fillText("Pontuação: " + pontuacao, 10, 20);
+}
+
+// Função para atualizar a posição do jogador e objeto
+function atualizar() {
+  if (setaDireita && jogadorX < canvas.width - jogadorLargura) {
+    jogadorX += 7; // Move o jogador para a direita
+  } else if (setaEsquerda && jogadorX > 0) {
+    jogadorX -= 7; // Move o jogador para a esquerda
+  }
+
+  // Atualiza a posição do objeto caindo
+  objetoY += velocidadeObjeto;
+}
+// Verifica se o objeto tocou o chão
+if (objetoY > canvas.height) {
+    jogoAtivo = false; // O jogo acaba
+    alert("Fim de jogo! Sua pontuação foi: " + pontuacao);
+    document.location.reload(); // Reinicia o jogo
+}
+
+// Verifica colisão com o jogador
+if (
+    objetoY + objetoAltura > canvas.height - jogadorAltura &&
+    objetoX + objetoLargura > jogadorX &&
+    objetoX < jogadorX + jogadorLargura
+) {
+    pontuacao++; // Aumenta a pontuação
+
+    // Reposiciona o objeto no topo, em uma posição aleatória
+    objetoX = Math.random() * (canvas.width - objetoLargura);
+    objetoY = 0;
+    velocidadeObjeto += 0.5; // Aumenta a velocidade do objeto gradualmente
+}
+
+// Função principal do jogo
+function desenhar() {
+    if (jogoAtivo) {
+        // Limpa o canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Desenha os elementos do jogo
+        desenhaJogador();
+        desenhaObjeto();
+        desenhaPontuacao();
+
+        // Atualiza a posição dos elementos
+        atualizar();
+    }
+}
+// Chama o próximo frame
+requestAnimationFrame(desenhar);
+
+// Captura os eventos de teclado
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'ArrowRight') {
+        setaDireita = true;
+    } else if (event.key === 'ArrowLeft') {
+        setaEsquerda = true;
+    }
+});
+
+document.addEventListener('keyup', function(event) {
+    if (event.key === 'ArrowRight') {
+        setaDireita = false;
+    } else if (event.key === 'ArrowLeft') {
+        setaEsquerda = false;
+    }
+});
+
+// Inicia o jogo
+desenhar();
+
+// Função para verificar colisão
+function verificaColisao() {
+  return objetoY + objetoAltura > canvas.height - jogadorAltura &&
+         objetoX + objetoLargura > jogadorX &&
+         objetoX < jogadorX + jogadorLargura;
+}
+
+// Função para reiniciar o objeto
+function reiniciaObjeto() {
+  objetoX = Math.random() * (canvas.width - objetoLargura);
+  objetoY = 0;
+  velocidadeObjeto = 3; // Reinicia a velocidade
+}
+
+// Função principal do jogo
+function desenhar() {
+  if (jogoAtivo) {
+    // ... (código original)
+
+    // Verifica colisão dentro do loop
+    if (verificaColisao()) {
+      pontuacao++;
+      reiniciaObjeto();
+    }
+
+    // Verifica se o objeto atingiu o chão
+    if (objetoY > canvas.height) {
+      jogoAtivo = false;
+      alert("Fim de jogo! Sua pontuação foi: " + pontuacao);
+      // document.location.reload(); // Comente esta linha para não recarregar a página
+    }
+  }
+}
+// Array de objetos
+let objetos = [];
+
+// Função para criar um novo objeto
+function criaObjeto() {
+  const objeto = {
+    x: Math.random() * (canvas.width - objetoLargura),
+    y: 0,
+    largura: objetoLargura,
+    altura: objetoAltura,
+    velocidade: velocidadeObjeto
+  };
+  objetos.push(objeto);
+}
+
+// Função para desenhar os objetos
+function desenhaObjetos() {
+  objetos.forEach(objeto => {
+    ctx.fillStyle = "red";
+    ctx.fillRect(objeto.x, objeto.y, objeto.largura, objeto.altura);
+    objeto.y += objeto.velocidade;
+  });
+}
+
+// Função principal do jogo
+function desenhar() {
+  // ... (código original)
+
+  // Desenha os objetos
+  desenhaObjetos();
+
+  // Verifica colisão com todos os objetos
+  for (let i = 0; i < objetos.length; i++) {
+    const objeto = objetos[i];
+    // ... (lógica de colisão)
+  }
+
+  // Remove objetos que saíram da tela
+  objetos = objetos.filter(objeto => objeto.y < canvas.height);
+
+  // Cria novos objetos periodicamente
+  if (Math.random() < 0.01) {
+    criaObjeto();
+  }
+}
+// Função para verificar colisão
+function verificaColisao(jogador, objeto) {
+  return jogador.x < objeto.x + objeto.largura &&
+         jogador.x + jogador.largura > objeto.x &&
+         jogador.y < objeto.y + objeto.altura &&
+         jogador.y + jogador.altura > objeto.y;
+}
+for (let i = 0; i < objetos.length; i++) {
+  const objeto = objetos[i];
+  if (verificaColisao({ x: jogadorX, y: canvas.height - jogadorAltura, largura: jogadorLargura, altura: jogadorAltura }, objeto)) {
+    pontuacao++;
+    reiniciaObjeto(objeto);
+  }
+}
+// Função para reiniciar o objeto
+function reiniciaObjeto(objeto) {
+  objeto.x = Math.random() * (canvas.width - objeto.largura);
+  objeto.y = 0;
+  objeto.velocidade += 0.5;
+}
+
+// Função para verificar se o jogo acabou
+function verificaFimDeJogo() {
+  return objetos.every(objeto => objeto.y > canvas.height);
+}
+// Array de níveis
+let niveis = [
+  { velocidade: 2, quantidadeObjetos: 5 },
+  { velocidade: 3, quantidadeObjetos: 8 },
+  // ... mais níveis
+];
+
+let nivelAtual = 0;
+
+// Função para iniciar um novo nível
+function iniciarNivel() {
+  // ... configurar o nível
+}
+let telaInicial = true;
+let telaFimDeJogo = false;
+
+// ... (código para desenhar as telas)
+
+// Função para iniciar o jogo
+function iniciarJogo() {
+  telaInicial = false;
+  telaFimDeJogo = false;
+  // ... inicializar o jogo
+}
