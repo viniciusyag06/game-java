@@ -6,7 +6,7 @@
     <title>Jogo de Capturar Objetos Caindo</title>
     <style>
         canvas {
-            background-color: rgb(0, 183, 255);
+            background-color: rgb(170, 0, 255);
             display: block;
             margin: 0 auto;
         }
@@ -126,130 +126,8 @@ document.addEventListener('keyup', function(event) {
 // Inicia o jogo
 desenhar();
 
-// Função para verificar colisão
-function verificaColisao() {
-  return objetoY + objetoAltura > canvas.height - jogadorAltura &&
-         objetoX + objetoLargura > jogadorX &&
-         objetoX < jogadorX + jogadorLargura;
-}
+</script>;
 
-// Função para reiniciar o objeto
-function reiniciaObjeto() {
-  objetoX = Math.random() * (canvas.width - objetoLargura);
-  objetoY = 0;
-  velocidadeObjeto = 3; // Reinicia a velocidade
-}
+</body>;
 
-// Função principal do jogo
-function desenhar() {
-  if (jogoAtivo) {
-    // ... (código original)
-
-    // Verifica colisão dentro do loop
-    if (verificaColisao()) {
-      pontuacao++;
-      reiniciaObjeto();
-    }
-
-    // Verifica se o objeto atingiu o chão
-    if (objetoY > canvas.height) {
-      jogoAtivo = false;
-      alert("Fim de jogo! Sua pontuação foi: " + pontuacao);
-      // document.location.reload(); // Comente esta linha para não recarregar a página
-    }
-  }
-}
-// Array de objetos
-let objetos = [];
-
-// Função para criar um novo objeto
-function criaObjeto() {
-  const objeto = {
-    x: Math.random() * (canvas.width - objetoLargura),
-    y: 0,
-    largura: objetoLargura,
-    altura: objetoAltura,
-    velocidade: velocidadeObjeto
-  };
-  objetos.push(objeto);
-}
-
-// Função para desenhar os objetos
-function desenhaObjetos() {
-  objetos.forEach(objeto => {
-    ctx.fillStyle = "red";
-    ctx.fillRect(objeto.x, objeto.y, objeto.largura, objeto.altura);
-    objeto.y += objeto.velocidade;
-  });
-}
-
-// Função principal do jogo
-function desenhar() {
-  // ... (código original)
-
-  // Desenha os objetos
-  desenhaObjetos();
-
-  // Verifica colisão com todos os objetos
-  for (let i = 0; i < objetos.length; i++) {
-    const objeto = objetos[i];
-    // ... (lógica de colisão)
-  }
-
-  // Remove objetos que saíram da tela
-  objetos = objetos.filter(objeto => objeto.y < canvas.height);
-
-  // Cria novos objetos periodicamente
-  if (Math.random() < 0.01) {
-    criaObjeto();
-  }
-}
-// Função para verificar colisão
-function verificaColisao(jogador, objeto) {
-  return jogador.x < objeto.x + objeto.largura &&
-         jogador.x + jogador.largura > objeto.x &&
-         jogador.y < objeto.y + objeto.altura &&
-         jogador.y + jogador.altura > objeto.y;
-}
-for (let i = 0; i < objetos.length; i++) {
-  const objeto = objetos[i];
-  if (verificaColisao({ x: jogadorX, y: canvas.height - jogadorAltura, largura: jogadorLargura, altura: jogadorAltura }, objeto)) {
-    pontuacao++;
-    reiniciaObjeto(objeto);
-  }
-}
-// Função para reiniciar o objeto
-function reiniciaObjeto(objeto) {
-  objeto.x = Math.random() * (canvas.width - objeto.largura);
-  objeto.y = 0;
-  objeto.velocidade += 0.5;
-}
-
-// Função para verificar se o jogo acabou
-function verificaFimDeJogo() {
-  return objetos.every(objeto => objeto.y > canvas.height);
-}
-// Array de níveis
-let niveis = [
-  { velocidade: 2, quantidadeObjetos: 5 },
-  { velocidade: 3, quantidadeObjetos: 8 },
-  // ... mais níveis
-];
-
-let nivelAtual = 0;
-
-// Função para iniciar um novo nível
-function iniciarNivel() {
-  // ... configurar o nível
-}
-let telaInicial = true;
-let telaFimDeJogo = false;
-
-// ... (código para desenhar as telas)
-
-// Função para iniciar o jogo
-function iniciarJogo() {
-  telaInicial = false;
-  telaFimDeJogo = false;
-  // ... inicializar o jogo
-}
+</html>;
