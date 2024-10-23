@@ -1,133 +1,113 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo de Capturar Objetos Caindo</title>
-    <style>
-        canvas {
-            background-color: rgb(170, 0, 255);
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
-</head>
-<body>
-    <canvas id="gameCanvas" width="500" height="500"></canvas>
-    <script>
-        // Seleciona o canvas e o contexto 2D
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-
-        // Variáveis do jogo
-        let jogadorX = canvas.width / 2 - 25; // Posição inicial do jogador
-        const jogadorLargura = 50; // Largura do jogador
-        const jogadorAltura = 20; // Altura do jogador
-
-        let objetoX = Math.random() * (canvas.width - 20); // Posição inicial do objeto
-        let objetoY = 0; // O objeto começa no topo
-        const objetoLargura = 20; // Largura do objeto
-        const objetoAltura = 20; // Altura do objeto
-        let velocidadeObjeto = 3; // Velocidade de queda do objeto
-        let pontuacao = 0; // Pontuação inicial
-        let jogoAtivo = true; // Controla se o jogo está ativo
-    
- 
-// Captura as teclas pressionadas
-let setaEsquerda = false;
-let setaDireita = false;
-
-// Função para desenhar o jogador
-function desenhaJogador() {
-  ctx.fillStyle = "green";
-  ctx.fillRect(jogadorX, canvas.height - jogadorAltura, jogadorLargura, jogadorAltura);
-}
-
-// Função para desenhar o objeto caindo
-function desenhaObjeto() {
-  ctx.fillStyle = "red";
-  ctx.fillRect(objetoX, objetoY, objetoLargura, objetoAltura);
-}
-
-// Função para desenhar a pontuação
-function desenhaPontuacao() {
-  ctx.fillStyle = "black";
-  ctx.font = "20px Arial";
-  ctx.fillText("Pontuação: " + pontuacao, 10, 20);
-}
-
-// Função para atualizar a posição do jogador e objeto
-function atualizar() {
-  if (setaDireita && jogadorX < canvas.width - jogadorLargura) {
-    jogadorX += 7; // Move o jogador para a direita
-  } else if (setaEsquerda && jogadorX > 0) {
-    jogadorX -= 7; // Move o jogador para a esquerda
-  }
-
-  // Atualiza a posição do objeto caindo
-  objetoY += velocidadeObjeto;
-}
-// Verifica se o objeto tocou o chão
-if (objetoY > canvas.height) {
-    jogoAtivo = false; // O jogo acaba
-    alert("Fim de jogo! Sua pontuação foi: " + pontuacao);
-    document.location.reload(); // Reinicia o jogo
-}
-
-// Verifica colisão com o jogador
-if (
-    objetoY + objetoAltura > canvas.height - jogadorAltura &&
-    objetoX + objetoLargura > jogadorX &&
-    objetoX < jogadorX + jogadorLargura
-) {
-    pontuacao++; // Aumenta a pontuação
-
-    // Reposiciona o objeto no topo, em uma posição aleatória
-    objetoX = Math.random() * (canvas.width - objetoLargura);
-    objetoY = 0;
-    velocidadeObjeto += 0.5; // Aumenta a velocidade do objeto gradualmente
-}
-
-// Função principal do jogo
-function desenhar() {
-    if (jogoAtivo) {
-        // Limpa o canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Desenha os elementos do jogo
-        desenhaJogador();
-        desenhaObjeto();
-        desenhaPontuacao();
-
-        // Atualiza a posição dos elementos
-        atualizar();
-    }
-}
-// Chama o próximo frame
-requestAnimationFrame(desenhar);
-
-// Captura os eventos de teclado
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'ArrowRight') {
-        setaDireita = true;
-    } else if (event.key === 'ArrowLeft') {
-        setaEsquerda = true;
-    }
-});
-
-document.addEventListener('keyup', function(event) {
-    if (event.key === 'ArrowRight') {
-        setaDireita = false;
-    } else if (event.key === 'ArrowLeft') {
-        setaEsquerda = false;
-    }
-});
-
-// Inicia o jogo
-desenhar();
-
-</script>;
-
-</body>;
-
-</html>;
+<DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Jogo de Capturar Objetos Caindo</title>
+        <style>
+            canvas {
+                background-color: rgb(81, 78, 84);
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="gameCanvas" width="500" height="500"></canvas>
+   
+        <script>
+            const canvas = document.getElementById("gameCanvas");
+            const ctx = canvas.getContext("2d");
+   
+            let jogadorX = canvas.width / 2 - 25;
+            const jogadorLargura = 50;
+            const jogadorAltura = 20;
+            let objetoX = Math.random() * (canvas.width - 20);
+            let objetoY = 0;
+            const objetoLargura = 20;
+            const objetoAltura = 20;
+            let velocidadeObjeto = 3;
+            let pontuacao = 0;
+            let jogoAtivo = true;
+            let setaEsquerda = false;
+            let setaDireita = false;
+            function desenhaJogador() {
+                ctx.fillStyle = "green";
+                ctx.fillRect(jogadorX, canvas.height - jogadorAltura, jogadorLargura, jogadorAltura);
+            }
+   
+            function desenhaObjeto() {
+                ctx.fillStyle = "purple";
+                ctx.fillRect(objetoX, objetoY, objetoLargura, objetoAltura);
+            }
+   
+            function desenhaPontuacao() {
+                ctx.fillStyle = "black";
+                ctx.font = "20px Arial";
+                ctx.fillText("Pontuação: " + pontuacao, 10, 20);
+            }
+   
+            function atualizar() {
+                if (setaDireita && jogadorX < canvas.width - jogadorLargura) {
+                    jogadorX += 7;
+                }
+                if (setaEsquerda && jogadorX > 0) {
+                    jogadorX -= 7;
+                }
+   
+                objetoY += velocidadeObjeto;
+   
+                if (objetoY > canvas.height) {
+                    jogoativo= false;
+                    alert ("Fim de jogo! Sua pontuação foi: " + pontuacao);
+                    document.location.reload();
+                }
+                if (
+                    objetoY + objetoAltura > canvas.height - jogadorAltura &&
+                    objetoX + objetoLargura > jogadorX &&
+                    objetoX < jogadorX + jogadorAltura
+                ) {
+                    pontuacao++;
+   
+                    objetoX = Math.random() * (canvas.width - objetoLargura);
+                    objetoY = 0;
+                    velocidadeObjeto += 0.5;
+                }
+            }
+   
+            function desenhar () {
+                if (jogoAtivo) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+   
+                    desenhaJogador();
+                    desenhaObjeto();
+                    desenhaPontuacao();
+   
+                    atualizar();
+   
+                    requestAnimationFrame(desenhar);
+                }
+            }
+   
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "ArrowRight") {
+                    setaDireita = true;
+                }
+                else if (event.key === "ArrowLeft") {
+                    setaEsquerda = true;
+                }
+            });
+   
+            document.addEventListener("keyup", function (evento) {
+                if (event.key === "ArrowRight") {
+                    setaDireita = false;
+                }
+                else if (event.key === "ArrowLeft") {
+                    setaEsquerda = false;
+                }
+            });
+   
+            desenhar();
+        </script>
+    </body>
+    </html>
